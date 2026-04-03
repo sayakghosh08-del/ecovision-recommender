@@ -1,5 +1,6 @@
 import streamlit as st
 import pickle
+st.image("logo.png", width=150)
 
 model = pickle.load(open("model.pkl", "rb"))
 
