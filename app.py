@@ -1,5 +1,7 @@
 import streamlit as st
 import pickle
+import pandas as pd
+import os
 st.image("logo.png", width=150)
 
 model = pickle.load(open("model.pkl", "rb"))
@@ -51,6 +53,16 @@ if st.button("Get Recommendation"):
         st.warning("⚠️ Please enter your name and phone number")
     
     else:
+        # Save student data
+data = {"Name": name, "Phone": phone}
+
+if os.path.exists("students.csv"):
+    df = pd.read_csv("students.csv")
+    df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
+else:
+    df = pd.DataFrame([data])
+
+df.to_csv("students.csv", index=False)
         input_data = [[
             edu_map[edu],
             interest_map[interest],
