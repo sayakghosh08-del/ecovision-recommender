@@ -49,34 +49,34 @@ scenario_map = {"Charts":1,"Code":2,"Research":3,"Business":4}
 # Prediction
 if st.button("Get Recommendation"):
     
-    if name == "" or phone == "":
-        st.warning("⚠️ Please enter your name and phone number")
-    
-    else:
-        # Save student data
-data = {"Name": name, "Phone": phone}
+   if name == "" or phone == "":
+    st.warning("⚠️ Please enter your name and phone number")
 
-if os.path.exists("students.csv"):
-    df = pd.read_csv("students.csv")
-    df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
 else:
-    df = pd.DataFrame([data])
+    data = {"Name": name, "Phone": phone}
 
-df.to_csv("students.csv", index=False)
-        input_data = [[
-            edu_map[edu],
-            interest_map[interest],
-            vibe_map[vibe],
-            coding_map[coding],
-            math_map[math],
-            work_map[work],
-            speed_map[speed],
-            scenario_map[scenario]
-        ]]
-        
-        result = model.predict(input_data)[0]
+    if os.path.exists("students.csv"):
+        df = pd.read_csv("students.csv")
+        df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
+    else:
+        df = pd.DataFrame([data])
 
-        st.success(f"🎯 {name}, Recommended: {result}")
+    df.to_csv("students.csv", index=False)
+
+    input_data = [[
+        edu_map[edu],
+        interest_map[interest],
+        vibe_map[vibe],
+        coding_map[coding],
+        math_map[math],
+        work_map[work],
+        speed_map[speed],
+        scenario_map[scenario]
+    ]]
+
+    result = model.predict(input_data)[0]
+
+    st.success(f"🎯 {name}, Recommended: {result}")
 
         if result == "Excel":
             st.write("👉 Start with Excel → Power BI → SQL")
