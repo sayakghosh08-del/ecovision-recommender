@@ -76,13 +76,16 @@ else:
 
     result = model.predict(input_data)[0]
 
-    st.success(f"🎯 {name}, Recommended: {result}")
+st.success(f"🎯 {name}, Recommended: {result}")
 
-        if result == "Excel":
-            st.write("👉 Start with Excel → Power BI → SQL")
-        elif result == "Python":
-            st.write("👉 Start with Python → Machine Learning → AI")
-        elif result == "PowerBI":
-            st.write("👉 Start with Excel → Power BI → Dashboarding")
-        elif result == "Stata":
-            st.write("👉 Start with Stata → Econometrics → Research")
+if result == "Excel":
+    st.write("👉 Start with Excel → Power BI → SQL")
+
+elif result == "Python":
+    st.write("👉 Start with Python → Machine Learning → AI")
+
+elif result == "PowerBI":
+    st.write("👉 Start with Excel → Power BI → Dashboarding")
+
+elif result == "Stata":
+    st.write("👉 Start with Stata → Econometrics → Research")
