@@ -98,3 +98,19 @@ if os.path.exists("students.csv"):
         file_name='students.csv',
         mime='text/csv'
     )
+
+# Admin password
+admin_password = st.text_input("🔒 Enter Admin Password", type="password")
+
+if admin_password == "1002":
+    if os.path.exists("students.csv"):
+        df = pd.read_csv("students.csv")
+
+        csv = df.to_csv(index=False).encode('utf-8')
+
+        st.download_button(
+            label="📥 Download Student Data",
+            data=csv,
+            file_name='students.csv',
+            mime='text/csv'
+        )
