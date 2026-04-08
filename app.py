@@ -1,13 +1,9 @@
 import streamlit as st
-import pickle
 import pandas as pd
 import os
 
 # Logo
 st.image("logo.png", width=150)
-
-# Load model
-model = pickle.load(open("model.pkl", "rb"))
 
 # Title
 st.markdown("# 🎓 Ecovision Academy")
@@ -28,16 +24,6 @@ work = st.selectbox("🏢 Work Preference", ["Corporate", "Freelance", "Academic
 speed = st.selectbox("⚡ Learning Speed", ["Fast", "Medium", "Slow"])
 scenario = st.selectbox("🧩 Scenario", ["Data", "Finance", "Charts", "AI"])
 
-# Mapping (IMPORTANT)
-edu_map = {"BA/MA":0, "BSc/MSc":1, "BCom/MCom":2, "BBA/MBA":3}
-interest_map = {"Tech":0, "Business":1, "Research":2, "Creative":3}
-vibe_map = {"Analytical":0, "Practical":1, "Creative":2}
-coding_map = {"Yes":1, "No":0}
-math_map = {"High":2, "Medium":1, "Low":0}
-work_map = {"Corporate":0, "Freelance":1, "Academic":2}
-speed_map = {"Fast":2, "Medium":1, "Slow":0}
-scenario_map = {"Data":0, "Finance":1, "Charts":2, "AI":3}
-
 # Button
 if st.button("Get Recommendation"):
 
@@ -56,20 +42,18 @@ if st.button("Get Recommendation"):
 
         df.to_csv("students.csv", index=False)
 
-        # Prepare input
-        input_data = [[
-            edu_map[edu],
-            interest_map[interest],
-            vibe_map[vibe],
-            coding_map[coding],
-            math_map[math],
-            work_map[work],
-            speed_map[speed],
-            scenario_map[scenario]
-        ]]
+        # 🔥 SMART LOGIC (REPLACES MODEL)
+        if interest == "Tech" and coding == "Yes":
+            result = "Python"
 
-        # Prediction
-        result = model.predict(input_data)[0]
+        elif interest == "Business":
+            result = "PowerBI"
+
+        elif interest == "Research":
+            result = "Stata"
+
+        else:
+            result = "Excel"
 
         # Output
         st.success(f"🎯 {name}, Recommended: {result}")
@@ -86,31 +70,21 @@ if st.button("Get Recommendation"):
         elif result == "Stata":
             st.write("👉 Start with Stata → Econometrics → Research")
 
-# Download button
-if os.path.exists("students.csv"):
-    df = pd.read_csv("students.csv")
+        # 🔒 Admin download (hidden)
+        with st.expander("🔒 Admin Only"):
+            admin_password = st.text_input("Enter Password", type="password")
 
-    csv = df.to_csv(index=False).encode('utf-8')
+            if admin_password == "1002":
+                df = pd.read_csv("students.csv")
 
-    st.download_button(
-        label="📥 Download Student Data",
-        data=csv,
-        file_name='students.csv',
-        mime='text/csv'
-    )
+                csv = df.to_csv(index=False).encode('utf-8')
 
-# Admin password
-admin_password = st.text_input("🔒 Enter Admin Password", type="password")
+                st.download_button(
+                    "📥 Download Data",
+                    csv,
+                    "students.csv",
+                    "text/csv"
+                )
 
-if admin_password == "1002":
-    if os.path.exists("students.csv"):
-        df = pd.read_csv("students.csv")
-
-        csv = df.to_csv(index=False).encode('utf-8')
-
-        st.download_button(
-            label="📥 Download Student Data",
-            data=csv,
-            file_name='students.csv',
-            mime='text/csv'
-        )
+       
+      
