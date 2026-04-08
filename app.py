@@ -85,3 +85,16 @@ if st.button("Get Recommendation"):
 
         elif result == "Stata":
             st.write("👉 Start with Stata → Econometrics → Research")
+
+# Download button
+if os.path.exists("students.csv"):
+    df = pd.read_csv("students.csv")
+
+    csv = df.to_csv(index=False).encode('utf-8')
+
+    st.download_button(
+        label="📥 Download Student Data",
+        data=csv,
+        file_name='students.csv',
+        mime='text/csv'
+    )
