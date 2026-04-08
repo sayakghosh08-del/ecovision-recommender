@@ -72,19 +72,26 @@ if st.button("Get Recommendation"):
 
         # 🔒 Admin download (hidden)
         with st.expander("🔒 Admin Only"):
-            admin_password = st.text_input("Enter Password", type="password")
+    admin_password = st.text_input("Enter Password", type="password")
 
-            if admin_password == "1002":
-                df = pd.read_csv("students.csv")
+    if admin_password == "1002":
+        if os.path.exists("students.csv"):
 
-                csv = df.to_csv(index=False).encode('utf-8')
+            df = pd.read_csv("students.csv")
 
-                st.download_button(
-                    "📥 Download Data",
-                    csv,
-                    "students.csv",
-                    "text/csv"
-                )
+            st.write("✅ Data loaded")   # debug line
+
+            csv = df.to_csv(index=False).encode('utf-8')
+
+            st.download_button(
+                "📥 Download Data",
+                csv,
+                "students.csv",
+                "text/csv"
+            )
+
+        else:
+            st.warning("No data found yet")
 
        
       
