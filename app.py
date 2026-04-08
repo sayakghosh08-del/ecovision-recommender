@@ -71,7 +71,7 @@ if st.button("Get Recommendation"):
             st.write("👉 Start with Stata → Econometrics → Research")
 
         # 🔒 Admin download (hidden)
-       st.markdown("---")
+st.markdown("---")
 admin_password = st.text_input("🔒 Admin Access", type="password")
 
 if admin_password == "1002":
