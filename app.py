@@ -2,10 +2,14 @@ import streamlit as st
 import pickle
 import pandas as pd
 import os
+
+# Logo
 st.image("logo.png", width=150)
 
+# Load model
 model = pickle.load(open("model.pkl", "rb"))
 
+# Title
 st.markdown("# 🎓 Ecovision Academy")
 st.markdown("## 🚀 Skill Recommender Tool")
 st.markdown("---")
@@ -15,77 +19,69 @@ name = st.text_input("👤 Student Name")
 phone = st.text_input("📞 Phone Number")
 
 # Inputs
-edu = st.selectbox("🎓 Education", ["BA/MA","BSc/MSc","BCom/MCom","BBA/MBA"])
+edu = st.selectbox("🎓 Education", ["BA/MA", "BSc/MSc", "BCom/MCom", "BBA/MBA"])
+interest = st.selectbox("💡 Interest", ["Tech", "Business", "Research", "Creative"])
+vibe = st.selectbox("✨ Work Style", ["Analytical", "Practical", "Creative"])
+coding = st.selectbox("💻 Coding Interest", ["Yes", "No"])
+math = st.selectbox("📊 Math Comfort", ["High", "Medium", "Low"])
+work = st.selectbox("🏢 Work Preference", ["Corporate", "Freelance", "Academic"])
+speed = st.selectbox("⚡ Learning Speed", ["Fast", "Medium", "Slow"])
+scenario = st.selectbox("🧩 Scenario", ["Data", "Finance", "Charts", "AI"])
 
-interest = st.selectbox("🎯 What excites you?",
-["Working with data","Business insights","Research","Tech"])
+# Mapping (IMPORTANT)
+edu_map = {"BA/MA":0, "BSc/MSc":1, "BCom/MCom":2, "BBA/MBA":3}
+interest_map = {"Tech":0, "Business":1, "Research":2, "Creative":3}
+vibe_map = {"Analytical":0, "Practical":1, "Creative":2}
+coding_map = {"Yes":1, "No":0}
+math_map = {"High":2, "Medium":1, "Low":0}
+work_map = {"Corporate":0, "Freelance":1, "Academic":2}
+speed_map = {"Fast":2, "Medium":1, "Slow":0}
+scenario_map = {"Data":0, "Finance":1, "Charts":2, "AI":3}
 
-vibe = st.selectbox("💼 Career vibe",
-["Corporate","Research","Tech","Government"])
-
-coding = st.selectbox("💻 Coding?", ["No","Maybe","Yes"])
-
-math = st.selectbox("🧠 Math level", ["Low","Medium","High"])
-
-work = st.selectbox("🧩 Work style",
-["Charts","Code","Theory","Business problems"])
-
-speed = st.selectbox("⏳ Learning speed",
-["Fast job","Medium","Deep learning"])
-
-scenario = st.selectbox("🧪 Pick a scenario",
-["Charts","Code","Research","Business"])
-
-# Mapping
-edu_map = {"BA/MA":1,"BSc/MSc":2,"BCom/MCom":3,"BBA/MBA":4}
-interest_map = {"Working with data":1,"Business insights":2,"Research":3,"Tech":4}
-vibe_map = {"Corporate":1,"Research":2,"Tech":3,"Government":4}
-coding_map = {"No":0,"Maybe":1,"Yes":2}
-math_map = {"Low":0,"Medium":1,"High":2}
-work_map = {"Charts":1,"Code":2,"Theory":3,"Business problems":4}
-speed_map = {"Fast job":0,"Medium":1,"Deep learning":2}
-scenario_map = {"Charts":1,"Code":2,"Research":3,"Business":4}
-
-# Prediction
+# Button
 if st.button("Get Recommendation"):
-    
-   if name == "" or phone == "":
-    st.warning("⚠️ Please enter your name and phone number")
 
-else:
-    data = {"Name": name, "Phone": phone}
+    if name == "" or phone == "":
+        st.warning("⚠️ Please enter your name and phone number")
 
-    if os.path.exists("students.csv"):
-        df = pd.read_csv("students.csv")
-        df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
     else:
-        df = pd.DataFrame([data])
+        # Save data
+        data = {"Name": name, "Phone": phone}
 
-    df.to_csv("students.csv", index=False)
+        if os.path.exists("students.csv"):
+            df = pd.read_csv("students.csv")
+            df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
+        else:
+            df = pd.DataFrame([data])
 
-    input_data = [[
-        edu_map[edu],
-        interest_map[interest],
-        vibe_map[vibe],
-        coding_map[coding],
-        math_map[math],
-        work_map[work],
-        speed_map[speed],
-        scenario_map[scenario]
-    ]]
+        df.to_csv("students.csv", index=False)
 
-    result = model.predict(input_data)[0]
+        # Prepare input
+        input_data = [[
+            edu_map[edu],
+            interest_map[interest],
+            vibe_map[vibe],
+            coding_map[coding],
+            math_map[math],
+            work_map[work],
+            speed_map[speed],
+            scenario_map[scenario]
+        ]]
 
-st.success(f"🎯 {name}, Recommended: {result}")
+        # Prediction
+        result = model.predict(input_data)[0]
 
-if result == "Excel":
-    st.write("👉 Start with Excel → Power BI → SQL")
+        # Output
+        st.success(f"🎯 {name}, Recommended: {result}")
 
-elif result == "Python":
-    st.write("👉 Start with Python → Machine Learning → AI")
+        if result == "Excel":
+            st.write("👉 Start with Excel → Power BI → SQL")
 
-elif result == "PowerBI":
-    st.write("👉 Start with Excel → Power BI → Dashboarding")
+        elif result == "Python":
+            st.write("👉 Start with Python → Machine Learning → AI")
 
-elif result == "Stata":
-    st.write("👉 Start with Stata → Econometrics → Research")
+        elif result == "PowerBI":
+            st.write("👉 Start with Excel → Power BI → Dashboarding")
+
+        elif result == "Stata":
+            st.write("👉 Start with Stata → Econometrics → Research")
