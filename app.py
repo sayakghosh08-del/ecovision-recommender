@@ -71,27 +71,23 @@ if st.button("Get Recommendation"):
             st.write("👉 Start with Stata → Econometrics → Research")
 
         # 🔒 Admin download (hidden)
-        with st.expander("🔒 Admin Only"):
-    admin_password = st.text_input("Enter Password", type="password")
+       st.markdown("---")
+admin_password = st.text_input("🔒 Admin Access", type="password")
 
-    if admin_password == "1002":
-        if os.path.exists("students.csv"):
+if admin_password == "1002":
+    try:
+        df = pd.read_csv("students.csv")
 
-            df = pd.read_csv("students.csv")
+        csv = df.to_csv(index=False).encode('utf-8')
 
-            st.write("✅ Data loaded")   # debug line
+        st.download_button(
+            "📥 Download Student Data",
+            csv,
+            "students.csv",
+            "text/csv"
+        )
 
-            csv = df.to_csv(index=False).encode('utf-8')
-
-            st.download_button(
-                "📥 Download Data",
-                csv,
-                "students.csv",
-                "text/csv"
-            )
-
-        else:
-            st.warning("No data found yet")
-
+    except:
+        st.warning("⚠️ No data available yet")
        
       
